@@ -118,15 +118,50 @@ async def add_subject(
         raise HTTPException(status_code=403, detail="Not a student")
 
     subject_oid = ObjectId(subject_id)
-    user_oid = ObjectId(current_user["id"])
+    student_oid = ObjectId(current_user["id"])
 
+    # 1️⃣ Fetch student
+    student = await db.students.find_one({"user_id": student_oid})
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    user = await db.users.find_one({"_id": student["user_id"]})
+    student_name = user.get("name", "")
+    
+    print(student_name)
+
+    # 2️⃣ Fetch subject
     subject = await db.subjects.find_one({"_id": subject_oid})
     if not subject:
         raise HTTPException(status_code=404, detail="Subject not found")
 
+    # 3️⃣ Add subject to student (ID only)
     await db.students.update_one(
-        {"user_id": user_oid},
+        {"user_id": student_oid},
         {"$addToSet": {"subjects": subject_oid}}
+    )
+
+    # 4️⃣ Add student to subject.students (CORRECT)
+    await db.subjects.update_one(
+        {
+            "_id": subject_oid,
+            "students.student_id": {"$ne": student_oid}  # ✅ FIX
+        },
+        {
+            "$push": {
+                "students": {
+                    "student_id": student_oid,           # ✅ FIX
+                    "name": student_name,
+                    "verified": False,
+                    "attendance": {
+                        "present": 0,
+                        "absent": 0,
+                        "total": 0,
+                        "percentage": 0
+                    }
+                }
+            }
+        }
     )
 
     return {"message": "Subject added successfully"}
@@ -146,10 +181,12 @@ async def remove_subject(
     subject_oid = ObjectId(subject_id)
     user_oid = ObjectId(current_user["id"])
     
+    # Ensure subject exists
     subject = await db.subjects.find_one({"_id": subject_oid})
     if not subject:
         raise HTTPException(status_code=404, detail="Subject not found")
     
+    # Remove subject from student
     result = await db.students.update_one(
         {"user_id": user_oid},
         {"$pull": {"subjects": subject_oid}}
@@ -157,5 +194,11 @@ async def remove_subject(
     
     if result.modified_count == 0:
         raise HTTPException(status_code=400, detail="Subject not assigned to student")
+    
+    # Remove student from subject.students
+    await db.subjects.update_one(
+        {"_id": subject_oid},
+        {"$pull": {"students": {"student_id": user_oid}}}
+    )
     
     return {"message": "Subject removed successfully"}

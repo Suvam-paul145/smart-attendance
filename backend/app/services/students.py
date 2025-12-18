@@ -35,7 +35,6 @@ async def get_student_profile(user_id: str):
                 "_id": str(sub["_id"]),
                 "name": sub.get("name"),
                 "code": sub.get("code"),
-                "type": sub.get("type"),
             }
             async for sub in subject_cursor
         ]

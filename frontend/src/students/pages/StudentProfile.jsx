@@ -75,7 +75,7 @@ export default function StudentProfile() {
   
   const {student, class: classDoc, professor, attendance_summary} = data;
   const img = data.image_url;
-  // console.log(data, img)
+  // console.log(data)
 
 
   return (
