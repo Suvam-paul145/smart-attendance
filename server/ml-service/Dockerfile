@@ -1,8 +1,9 @@
 FROM python:3.10-slim
 
-# ✅ REQUIRED for OpenCV (libGL)
+# ✅ Required runtime libs for OpenCV & MediaPipe
 RUN apt-get update && apt-get install -y \
     libgl1 \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
