@@ -86,30 +86,29 @@ export default function Settings() {
       if (!mounted) return;
 
       setProfile({
-        name: data?.profile?.name ?? "",
-        email: data?.profile?.email ?? "",
-        phone: data?.profile?.phone ?? "",
-        role: data?.profile?.role ?? "",
-        subjects: data?.profile?.subjects ?? [],
-        avatarUrl: data?.profile?.avatarUrl ?? null,
+        name: data?.name ?? "",
+        email: data?.email ?? "",
+        phone: data?.phone ?? "",
+        role: data?.role ?? "",
+        subjects: data?.subjects ?? [],
+        avatarUrl: data?.avatarUrl ?? null,
       });
 
       setTheme(data?.theme ?? "Light");
 
       setNotifications({
-        push: data?.notifications?.push ?? true,
-        inApp: data?.notifications?.inApp ?? true,
-        sound: data?.notifications?.sound ?? false,
+        push: data?.settings?.notifications?.push ?? true,
+        inApp: data?.settings?.notifications?.inApp ?? true,
+        sound: data?.settings?.notifications?.sound ?? false,
       });
 
-      setEmailPreferences(data?.emailPreferences ?? []);
+      setEmailPreferences(data?.settings?.emailPreferences ?? []);
 
-      setWarningVal(data?.thresholds?.warningVal ?? 75);
-      setSafeVal(data?.thresholds?.safeVal ?? 85);
+      setWarningVal(data?.settings?.thresholds?.warningVal ?? 75);
+      setSafeVal(data?.settings?.thresholds?.safeVal ?? 85);
 
-      setSensitivity(data?.faceSettings?.sensitivity ?? 80);
-      setLiveness(data?.faceSettings?.liveness ?? true);
-
+      setSensitivity(data?.settings?.faceSettings?.sensitivity ?? 80);
+      setLiveness(data?.settings?.faceSettings?.liveness ?? true);
     } catch (err) {
       console.error("Settings load failed:", err);
       if (mounted) setLoadError(err.message || String(err));
