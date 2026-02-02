@@ -72,6 +72,8 @@ async def register(payload: RegisterRequest, background_tasks: BackgroundTasks):
                 "name": payload.name,
                 "email": payload.email,
                 "branch": payload.branch,
+                "roll":payload.roll,
+                "year":payload.year,
                 "created_at": datetime.utcnow(),
             }
             await db.students.insert_one(student_doc)
