@@ -32,6 +32,7 @@ async def api_get_my_profile(
 
     return profile
 
+
 # ============================
 # GET STUDENT PROFILE (PUBLIC)
 # ============================

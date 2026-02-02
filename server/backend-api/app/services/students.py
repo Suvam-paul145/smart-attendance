@@ -45,8 +45,7 @@ async def get_student_profile(user_id: str):
         "userId": str(student["userId"]),
         "name": user.get("name"),
         "email": user.get("email"),
-        "branch":user.get("branch") or student.get("branch"),
-        "roll":student.get("roll"),
+        "branch": user.get("branch") or student.get("branch"),
         "year": student.get("year"),
         "subjects": subjects,              # ✅ populated & serialized
         "avatarUrl": student.get("avatarUrl"),
