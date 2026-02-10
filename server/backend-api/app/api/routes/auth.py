@@ -182,6 +182,7 @@ async def login(payload: LoginRequest):
         "email": email,
         "role": user["role"],
         "name": user["name"],
+        "college_name": user.get("college_name", ""),
         "token": token
     }
 
