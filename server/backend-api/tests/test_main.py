@@ -1,16 +1,19 @@
-from fastapi.testclient import TestClient
-from unittest.mock import MagicMock
 import sys
+from unittest.mock import MagicMock
+from fastapi.testclient import TestClient
 
 # Mock modules before importing app.main to avoid side effects if any
+sys.modules["app.db.mongo"] = MagicMock()
+sys.modules["motor.motor_asyncio"] = MagicMock()
+sys.modules["pymongo"] = MagicMock()
 sys.modules["app.services.ml_client"] = MagicMock()
 sys.modules["app.services.attendance_daily"] = MagicMock()
-sys.modules["app.db.mongo"] = MagicMock()
 
+from fastapi.testclient import TestClient
 from app.main import app
 
-client = TestClient(app)
 
+client = TestClient(app)
 
 def test_read_root():
     # We expect a 404 for root "/" as it's not defined, or 200 if it is.

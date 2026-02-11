@@ -24,7 +24,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(APP_NAME)
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
