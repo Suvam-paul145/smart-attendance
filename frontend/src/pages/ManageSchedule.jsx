@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import Spinner from "../components/Spinner";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export default function ManageSchedule() {
   const [activeDay, setActiveDay] = useState("Mon");
   const [isLoading, setIsLoading] = useState(true);
@@ -22,24 +24,113 @@ export default function ManageSchedule() {
     const day = i - 2; 
     return day > 0 && day <= 30 ? day : "";
   });
-  useEffect(() => {
-    const fetchSchedule = async () => {
+useEffect(() => {
+  const fetchSchedule = async () => {
+    try {
       setIsLoading(true);
-      // Simulate API delay
-      setTimeout(() => {
-        setScheduleData([
-          { id: 1, title: "Mathematics 10A", time: "08:00 - 09:00", room: "203", teacher: "Alex Johnson", day: "Mon", status: "Active" },
-          { id: 2, title: "Physics 9B", time: "09:15 - 10:15", room: "Lab 2", teacher: "Alex Johnson", day: "Mon", status: "Active" },
-          { id: 3, title: "Chemistry 11C", time: "11:00 - 12:00", room: "Lab 1", teacher: "Alex Johnson", day: "Tue", status: "Pending" },
-        ]);
-        setIsLoading(false);
-      }, 800);
-    };
-    fetchSchedule();
-  }, []);
 
+      const res = await fetch(`${apiUrl}/settings`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to load schedule");
+
+      const data = await res.json();
+
+      const scheduleData = data.schedule||{
+        timetable: [],
+        recurring: null,
+        holidays: [],
+        exams: [],
+        meta: {},
+      };
+      loadSchedule(scheduleData);
+    } catch (err) {
+      console.error(err);
+      alert("Error loading schedule");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  fetchSchedule();
+}, []);
+const loadSchedule = (schedule) => {
+  const timetable = schedule?.timetable || [];
+  const flatData = timetable.flatMap(({ day, periods }) => 
+    periods.map((period) => ({
+      id: `${day}-${period.slot}-${Math.random()}`, 
+      title: period.metadata?.subject_name || "Untitled",
+      time: `${period.start} - ${period.end}`,
+      room: period.metadata?.room || "TBD",
+      teacher: "Self",
+      day: day.slice(0, 3), 
+      status: "Active",
+    }))
+  );
+  setScheduleData(flatData);
+};
+const preparePayload = () => {
+  const fullDayMap = {
+    Mon: "Monday",
+    Tue: "Tuesday",
+    Wed: "Wednesday",
+    Thu: "Thursday",
+    Fri: "Friday",
+    Sat: "Saturday",
+  };
+  const grouped = {};
+  scheduleData.forEach((cls, index) => {
+    const fullDay = fullDayMap[cls.day] || cls.day || "Unknown";
+    if (!grouped[fullDay]) grouped[fullDay] = [];
+    const [start, end] = cls.time.split(" - ");
+    grouped[fullDay].push({
+      slot: grouped[fullDay].length + 1,
+      start,
+      end,
+      metadata: {
+        subject_name: cls.title,
+        room: cls.room,
+        tracked: true,
+      },
+    });
+  });
+  return {
+    timetable: Object.keys(grouped).map((day) => 
+    ({day,periods: grouped[day],})),
+    recurring: null,
+    holidays: [],
+    exams: [],
+    meta: {},
+  };
+};
+
+const handleSave = async () => {
+  try {
+    const schedulePayload = preparePayload();
+
+    const res = await fetch(`${apiUrl}/settings`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        schedule: schedulePayload,
+      }),
+    });
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.detail||"Failed to save");
+    }
+    alert("Schedule saved successfully");
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
   const filteredClasses = scheduleData.filter(item => item.day === activeDay);
-
   const handleAddClass = () => {
     const newClass = {
       id: Date.now(),
@@ -66,7 +157,7 @@ export default function ManageSchedule() {
             <p className="text-[var(--text-body)] mt-1">Editing schedule for {activeDay}</p>
           </div>
           <div className="flex items-center gap-3">
-            <button className="px-6 py-2.5 bg-[var(--primary)] text-white rounded-xl font-semibold shadow-sm transition active:scale-95">
+            <button onClick={handleSave} className="px-6 py-2.5 bg-[var(--primary)] text-white rounded-xl font-semibold shadow-sm transition active:scale-95">
               Save schedule
             </button>
           </div>
@@ -142,7 +233,7 @@ export default function ManageSchedule() {
 
               {/* Calendar Grid */}
               <div className="grid grid-cols-7 gap-y-4 gap-x-2 text-center text-sm mb-2">
-                {["M", "T", "W", "T", "F", "S", "S"].map(d => (
+                {days.map(d => (
                   <span key={d} className="text-xs font-medium text-[var(--text-body)]">{d}</span>
                 ))}
               </div>
