@@ -10,7 +10,7 @@ import {
   MoreHorizontal, // this icon can be used for "more options" on class cards
   Loader2,
 } from "lucide-react";
-import { getSettings, updateSettings } from "../api/settings";
+import { getSettings, updateSettings } from "../api/schedule";
 import Spinner from "../components/Spinner";
 
 
