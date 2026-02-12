@@ -14,6 +14,7 @@ from app.main import app  # noqa: E402
 
 client = TestClient(app)
 
+
 def test_read_root():
     # We expect a 404 for root "/" as it's not defined, or 200 if it is.
     response = client.get("/")

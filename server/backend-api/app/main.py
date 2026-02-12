@@ -15,6 +15,7 @@ from app.services.attendance_daily import (
     ensure_indexes as ensure_attendance_daily_indexes,
 )
 from app.services.ml_client import ml_client
+
 load_dotenv()
 
 logging.basicConfig(
@@ -22,6 +23,7 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(APP_NAME)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

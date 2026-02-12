@@ -151,7 +151,6 @@ async def login(payload: LoginRequest):
     print(f"Login request received for email: {payload.email}")
     email = payload.email
 
-
     user = await db.users.find_one({"email": payload.email})
 
     # 1. Find user with this email
