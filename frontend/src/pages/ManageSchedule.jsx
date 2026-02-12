@@ -82,7 +82,7 @@ export default function ManageSchedule() {
       Sat: "Saturday",
     };
     const grouped = {};
-    scheduleData.forEach((cls, index) => {
+    scheduleData.forEach((cls) => {
       const fullDay = fullDayMap[cls.day] || cls.day || "Unknown";
       if (!grouped[fullDay]) grouped[fullDay] = [];
       grouped[fullDay].push({
