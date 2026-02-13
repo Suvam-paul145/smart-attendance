@@ -1,0 +1,60 @@
+# =========================
+# Apertre 3.0 – Auto Labels
+# =========================
+
+# ---------- DOMAIN (OPTIONAL) ----------
+frontend:
+  - frontend/**
+
+backend:
+  - server/backend-api/**
+  - app/api/**
+  - app/services/**
+
+ml:
+  - server/ml-service/**
+  - app/ml/**
+
+# ---------- HARD (HIGH-IMPACT ONLY) ----------
+hard:
+  # Security & Auth
+  - app/api/routes/auth.py
+  - app/core/security/**
+  - app/core/jwt*
+  - app/core/config.py
+
+  # ML / AI
+  - server/ml-service/**
+  - app/ml/**
+
+  # Database & Schema
+  - app/db/**
+  - app/schemas/**
+
+  # Infra / CI / Docker
+  - docker-compose.yml
+  - .github/workflows/**
+  - Dockerfile
+
+# ---------- MEDIUM (DEFAULT BACKEND) ----------
+medium:
+  # Normal backend APIs
+  - app/api/**
+  - app/services/**
+  - server/backend-api/**
+
+  # Frontend logic pages
+  - frontend/src/pages/**
+  - frontend/src/hooks/**
+  - frontend/src/store/**
+
+# ---------- EASY (LOW RISK) ----------
+easy:
+  # UI & Styling
+  - frontend/src/components/**
+  - frontend/src/styles/**
+  - frontend/src/assets/**
+
+  # Docs & config
+  - "**/*.md"
+  - ".env.example"
