@@ -353,14 +353,7 @@ async def reset_password(payload: ResetPasswordRequest) -> dict:
     if not stored_otp_hash or not verify_password(payload.otp, stored_otp_hash):
         raise HTTPException(status_code=400, detail=GENERIC_OTP_ERROR)
 
-    # Hash password
-    try:
-        new_hash = hash_password(payload.password)
-    except ValueError:
-        raise HTTPException(
-            status_code=400,
-            detail="Password too long (max 72 bytes)",
-        )
+    new_hash = hash_password(payload.password)
 
     await db.users.update_one(
         {"_id": user["_id"]},
