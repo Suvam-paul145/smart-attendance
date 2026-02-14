@@ -40,6 +40,7 @@ export default function Login() {
       const data = await res.json();
 
       localStorage.setItem("token", data.token)
+      if (data.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
       localStorage.setItem("user", JSON.stringify(data));
 
       // --- FIX: Handle role case sensitivity (Teacher/Student vs teacher/student) ---

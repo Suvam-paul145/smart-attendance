@@ -46,6 +46,10 @@ class LoginRequest(BaseModel):
     password: constr(max_length=72)
 
 
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
+
+
 class UserResponse(BaseModel):
     user_id: str
     email: str
@@ -53,6 +57,7 @@ class UserResponse(BaseModel):
     name: str
     college_name: str
     token: str
+    refresh_token: str | None = None
     
 class RegisterResponse(BaseModel):
     user_id: str

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 import base64
 from io import BytesIO
 import time
@@ -32,12 +32,13 @@ from app.core.constants import (
     ERROR_INVALID_IMAGE,
     ERROR_PROCESSING
 )
+from app.core.security import verify_api_key
 
 from app.ml.face_detector import detect_faces
 from app.ml.face_encoder import get_face_embedding
 from app.ml.face_matcher import cosine_similarity
 
-router = APIRouter(prefix="/api/ml", tags=["ML"])
+router = APIRouter(prefix="/api/ml", tags=["ML"], dependencies=[Depends(verify_api_key)])
 
 
 @router.post("/encode-face", response_model=EncodeFaceResponse)

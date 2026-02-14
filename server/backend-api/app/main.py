@@ -2,7 +2,7 @@
 import os
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 import sentry_sdk
@@ -12,7 +12,7 @@ from app.api.routes import teacher_settings as settings_router
 from .api.routes.attendance import router as attendance_router
 from .api.routes.auth import router as auth_router
 from .api.routes.students import router as students_router
-from .core.config import APP_NAME
+from .core.config import APP_NAME, settings
 from app.services.attendance_daily import (
     ensure_indexes as ensure_attendance_daily_indexes,
 )
@@ -25,8 +25,12 @@ from .core.error_handlers import smart_attendance_exception_handler, generic_exc
 from .core.exceptions import SmartAttendanceException
 from .middleware.correlation import CorrelationIdMiddleware
 from .middleware.timing import TimingMiddleware
+from .middleware.security import SecurityHeadersMiddleware
 
 from .api.routes.health import router as health_router
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from app.core.limiter import limiter
 
 load_dotenv()
 
@@ -60,18 +64,20 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     app = FastAPI(title=APP_NAME, lifespan=lifespan)
+    
+    # Rate limiter
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
     # Middleware
+    app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(CorrelationIdMiddleware)
     app.add_middleware(TimingMiddleware)
 
     # CORS – use config ORIGINS so production can override via CORS_ORIGINS env
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-        ],
+        allow_origins=settings.ORIGINS,
         allow_origin_regex=r"https://.*\.vercel\.app",
         allow_credentials=True,
         allow_methods=["*"],
