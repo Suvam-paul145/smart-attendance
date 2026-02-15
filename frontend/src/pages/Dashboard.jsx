@@ -15,7 +15,6 @@ import {
   AlertTriangle
 } from "lucide-react"; // Assuming you use lucide-react, or replace with your icons
 import { getTodaySchedule } from "../api/schedule";
-import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
   const { t } = useTranslation();
