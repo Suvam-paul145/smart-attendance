@@ -11,7 +11,7 @@ import {
   Menu,
   QrCode
 } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import StudentNavigation from "../components/StudentNavigation"
 
 export default function StudentDashboard() {
