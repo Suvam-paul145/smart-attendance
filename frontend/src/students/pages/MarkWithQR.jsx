@@ -88,6 +88,7 @@ export default function MarkWithQR() {
                 <button
                     onClick={() => navigate(-1)}
                     className="p-2 -ml-2 text-slate-500 hover:bg-gray-100 rounded-full transition-colors"
+                    aria-label="Go back"
                 >
                     <ArrowLeft size={24} />
                 </button>
