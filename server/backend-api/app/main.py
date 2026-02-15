@@ -12,6 +12,7 @@ from app.api.routes import teacher_settings as settings_router
 from .api.routes.attendance import router as attendance_router
 from .api.routes.auth import router as auth_router
 from .api.routes.students import router as students_router
+from .api.routes.notifications import router as notifications_router
 from .core.config import APP_NAME, settings
 from app.services.attendance_daily import (
     ensure_indexes as ensure_attendance_daily_indexes,
@@ -69,12 +70,7 @@ def create_app() -> FastAPI:
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-    # Middleware
-    app.add_middleware(SecurityHeadersMiddleware)
-    app.add_middleware(CorrelationIdMiddleware)
-    app.add_middleware(TimingMiddleware)
-
-    # CORS – use config ORIGINS so production can override via CORS_ORIGINS env
+    # CORS MUST be added FIRST so headers are present even on errors
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.ORIGINS,
@@ -83,6 +79,11 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # Middleware
+    app.add_middleware(SecurityHeadersMiddleware)
+    app.add_middleware(CorrelationIdMiddleware)
+    app.add_middleware(TimingMiddleware)
 
     # SessionMiddleware MUST be added before routers so authlib can use request.session reliably  # noqa: E501
     app.add_middleware(
@@ -103,6 +104,7 @@ def create_app() -> FastAPI:
     app.include_router(students_router)
     app.include_router(attendance_router)
     app.include_router(settings_router.router)
+    app.include_router(notifications_router)
     app.include_router(health_router, tags=["Health"])
 
     return app

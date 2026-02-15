@@ -40,12 +40,6 @@ oauth = OAuth()
 @limiter.limit("5/hour")
 async def register(request: Request, payload: RegisterRequest, background_tasks: BackgroundTasks):
 
-    if len(payload.password.encode("utf-8")) > 72:
-        raise HTTPException(
-            status_code=400,
-            detail="Password too long. Please use at most 72 characters",
-        )
-
     # Check existing user
     existing = await db.users.find_one({"email": payload.email})
 
@@ -55,6 +49,12 @@ async def register(request: Request, payload: RegisterRequest, background_tasks:
     # Generate random verification link
     verification_token = secrets.token_urlsafe(32)
     verification_expiry = datetime.now(UTC) + timedelta(hours=24)
+
+    if len(payload.password.encode("utf-8")) > 72:
+        raise HTTPException(
+            status_code=400,
+            detail="Password too long. Please use at most 72 characters",
+        )
 
     user_doc = {
         "name": payload.name,
