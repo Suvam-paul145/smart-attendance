@@ -130,17 +130,17 @@ export default function StudentList() {
         <div className="xl:col-span-3 space-y-4">
           
           {/* Filters Bar */}
-          <div className="bg-[var(--bg-card)] p-4 rounded-xl border border-gray-100 shadow-sm">
+          <div className="bg-[var(--bg-card)] p-4 rounded-xl border border-[color:var(--border-color)] shadow-sm">
             
             {/* Search */}
             <div className="relative w-full mb-3">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--text-body)]" size={18} />
               <input 
                 type="text" 
                 placeholder="Search by name or ID" 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 border-none rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full pl-10 pr-4 py-2 bg-[color:var(--bg-secondary)] border-none rounded-lg text-sm focus:ring-2 focus:ring-[color:var(--primary)] outline-none"
               />
             </div>
 
@@ -149,7 +149,7 @@ export default function StudentList() {
               <select
                 value={selectedSubject || ""}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="flex items-center gap-1 text-sm font-medium text-gray-600 px-3 py-1.5 hover:bg-gray-100 rounded-lg cursor-pointer"
+                className="flex items-center gap-1 text-sm font-medium text-[color:var(--text-body)] px-3 py-1.5 hover:bg-[color:var(--bg-secondary)] rounded-lg cursor-pointer"
               >
                 <option value="">Select subject</option>
                 {subjects.map(s => (
@@ -161,7 +161,7 @@ export default function StudentList() {
 
               <button 
                 onClick={handleSortToggle}
-                className="flex items-center gap-1 text-sm font-medium text-gray-600 px-3 py-1.5 hover:bg-gray-100 rounded-lg cursor-pointer"
+                className="flex items-center gap-1 text-sm font-medium text-[color:var(--text-body)] px-3 py-1.5 hover:bg-[color:var(--bg-secondary)] rounded-lg cursor-pointer"
                 title="Sort by attendance"
               >
                 <span className="hidden sm:inline">Sort by attendance</span>
@@ -172,7 +172,7 @@ export default function StudentList() {
                 />
               </button>
               
-              <div className="hidden sm:block h-6 w-px bg-gray-200 mx-1"></div>
+              <div className="hidden sm:block h-6 w-px bg-[color:var(--border-color)] mx-1"></div>
 
               {["All", "High (> 90%)", "Medium (75-90%)", "Low (< 75%)"].map((filter) => {
                 const shortLabels = {
@@ -188,8 +188,8 @@ export default function StudentList() {
                     onClick={() => setSelectedFilter(filter)}
                     className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
                       selectedFilter === filter 
-                        ? "bg-indigo-100 text-indigo-700" 
-                        : "text-gray-500 hover:bg-gray-50"
+                        ? "bg-[color:var(--primary)] text-white" 
+                        : "text-[color:var(--text-body)] hover:bg-[color:var(--bg-secondary)]"
                     }`}
                     title={filter}
                   >

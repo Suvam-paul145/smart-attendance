@@ -1,8 +1,5 @@
 /* frontend/src/index.css */
 @import "tailwindcss";
-@reference "tailwindcss";
-
-
 
 /* Theme variables (light default) */
 :root {
@@ -122,8 +119,6 @@ body,
 }
 
 /* small reusable components */
-@reference "tailwindcss";
-
 .btn-primary {
   @apply px-6 py-2 rounded-xl text-white font-medium;
   background: var(--color-primary);
