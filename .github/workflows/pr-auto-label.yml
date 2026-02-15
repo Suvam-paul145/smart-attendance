@@ -1,13 +1,14 @@
 name: PR Auto Manager
 
+# 🚀 CHANGE 1: Use 'pull_request_target' to allow writing labels on Fork PRs
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, reopened, edited]
 
-# 🛡️ Permissions: Explicitly granted to avoid 403 errors
+# 🚀 CHANGE 2: Grant 'issues: write' to allow adding labels/assignees
 permissions:
   pull-requests: write
-  issues: read
+  issues: write
 
 jobs:
   label-and-assign:
@@ -34,6 +35,7 @@ jobs:
                 console.log(`✅ Assigned PR to creator: ${pr.user.login}`);
               }
             } catch (error) {
+              // Ignore error if user cannot be assigned (common with outside contributors)
               console.log(`⚠️ Could not assign user: ${error.message}`);
             }
 
@@ -46,7 +48,7 @@ jobs:
             // -----------------------------------------
             // 3. Find Linked Issue & Extract Difficulty
             // -----------------------------------------
-            // Regex matches: "Closes #123", "Fixes #123", "Resolves #123" (case insensitive)
+            // Regex matches: "Closes #123", "Fixes #123"
             const linkedIssueRegex = /(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved):?\s+#(\d+)/i;
             const match = pr.body ? pr.body.match(linkedIssueRegex) : null;
 
@@ -61,7 +63,7 @@ jobs:
                   issue_number: issueNumber
                 });
 
-                // logic: Look for labels containing "easy", "medium", "hard", or "difficulty"
+                // Look for difficulty labels
                 const difficultyKeywords = ["easy", "medium", "hard", "difficulty", "good first issue"];
                 
                 const foundLabels = issue.labels
@@ -71,15 +73,11 @@ jobs:
                 if (foundLabels.length > 0) {
                   console.log(`🎯 Found difficulty labels: ${foundLabels.join(", ")}`);
                   labelsToAdd.push(...foundLabels);
-                } else {
-                  console.log("ℹ️ Linked issue has no difficulty labels.");
                 }
 
               } catch (error) {
                 console.log(`⚠️ Error fetching issue #${issueNumber}: ${error.message}`);
               }
-            } else {
-              console.log("ℹ️ No linked issue number found in PR body (e.g., 'Closes #123').");
             }
 
             // -----------------------------------------
