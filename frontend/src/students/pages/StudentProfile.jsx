@@ -19,7 +19,6 @@ import {
 import StudentNavigation from "../components/StudentNavigation"
 import { Link } from "react-router-dom";
 import { uploadFaceImage } from "../../api/students"
-import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function StudentProfile() {
