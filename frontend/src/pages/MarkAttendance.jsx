@@ -270,7 +270,7 @@ export default function MarkAttendance() {
         {/* QR Code Modal */}
         {showQRModal && selectedSubject && (
           <StartAttendanceModal 
-            sessionId={selectedSubject}
+            sessionId={`${selectedSubject}-${Date.now()}`}
             onClose={() => setShowQRModal(false)} 
           />
         )}
