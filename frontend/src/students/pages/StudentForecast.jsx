@@ -32,7 +32,7 @@ export default function StudentForecast() {
     ? Math.round(((presentSoFar + classesToAttend) / denom) * 100)
     : 0;
 
-  const isEligible = projectedScore >= 75;
+  const isEligible = projectedScore >= TARGET * 100;
   const TARGET = 0.75;
 
   const classesNeeded = (() => {
