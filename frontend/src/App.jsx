@@ -80,6 +80,7 @@ export default function App() {
           <Route path="/reports" element={<Reports />} />
           <Route path="/manage-schedule" element={<ProtectedRoute><ManageSchedule /></ProtectedRoute>} />
           <Route path="/messaging" element={<ProtectedRoute><Messaging /></ProtectedRoute>} />
+          <Route path="/broadcast" element={<ProtectedRoute><BroadcastPage /></ProtectedRoute>} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/add-students" element={<AddStudents />} />
           <Route path="/login" element={<Login />} />
