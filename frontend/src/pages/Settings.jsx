@@ -328,7 +328,7 @@ export default function Settings() {
 
   if (loadError)
     return (
-      <div className="p-6 text-rose-600">
+      <div className="p-6 text-[var(--danger)]">
         {t('settings.alerts.load_failed', { error: loadError })}
       </div>
     );
@@ -380,9 +380,10 @@ export default function Settings() {
                         key={mode}
                         onClick={() => setTheme(mode)}
                         className={`flex items-center gap-2 px-6 py-3 rounded-xl border font-medium transition-all ${theme === mode
-                          ? "border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--primary)]"
-                          : "border-[var(--border-color)] hover:bg-[var(--bg-hover)] text-[var(--text-body)]"
+                            ? "border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--primary)]"
+                            : "border-[var(--border-color)] hover:bg-[var(--bg-secondary)] text-[var(--text-body)]"
                           }`}
+                        onClick={() => setTheme(mode)}
                       >
                         {mode === "Light" && <Sun size={18} />}
                         {mode === "Dark" && <Moon size={18} />}
@@ -496,7 +497,7 @@ export default function Settings() {
 
                 {/* Footer Buttons */}
                 <div className="pt-6 flex justify-end gap-3 border-t border-[var(--border-color)]">
-                  <button className="px-6 py-2.5 rounded-xl text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-hover)] border border-[var(--border-color)]">
+                  <button className="px-6 py-2.5 rounded-xl text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-secondary)] border border-[var(--border-color)]">
                     {t('settings.general.cancel')}
                   </button>
                   <button
@@ -611,7 +612,7 @@ export default function Settings() {
                   </div>
 
                   <div className="pt-8 flex justify-end gap-3 border-t border-[var(--border-color)]">
-                    <button className="px-6 py-2.5 rounded-xl text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-hover)] border border-[var(--border-color)] cursor-pointer">
+                    <button className="px-6 py-2.5 rounded-xl text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-secondary)] border border-[var(--border-color)] cursor-pointer">
                       {t('settings.general.cancel')}
                     </button>
                     <button
@@ -644,7 +645,7 @@ export default function Settings() {
                 </div>
 
                 <div className="flex items-center gap-6 p-6 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
-                  <div className="w-20 h-20 bg-[var(--bg-hover)] rounded-full flex items-center justify-center text-2xl font-bold text-[var(--text-body)] opacity-90 border-4 border-[var(--border-color)] shadow-sm overflow-hidden">
+                  <div className="w-20 h-20 bg-[var(--bg-secondary)] rounded-full flex items-center justify-center text-2xl font-bold text-[var(--text-body)] opacity-90 border-4 border-[var(--border-color)] shadow-sm overflow-hidden">
                     {profile.avatarUrl ? (
                       <img
                         src={profile.avatarUrl}
@@ -663,7 +664,7 @@ export default function Settings() {
                       {profile.branch?.toUpperCase() || "Department of Science"}
                     </p>{" "}
                   </div>
-                  <label className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-hover)] transition shadow-sm cursor-pointer">
+                  <label className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-secondary)] transition shadow-sm cursor-pointer">
                     <Upload size={16} />
                     <span>{t('settings.profile.change_photo')}</span>
                     <input
@@ -791,7 +792,7 @@ export default function Settings() {
                         }
                       })();
                     }}
-                    className="px-6 py-2.5 rounded-xl text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-hover)] border border-[var(--border-color)] cursor-pointer"
+                    className="px-6 py-2.5 rounded-xl text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-secondary)] border border-[var(--border-color)] cursor-pointer"
                   >
                     {t('settings.general.cancel')}
                   </button>
@@ -835,7 +836,7 @@ export default function Settings() {
                       </p>
                     </div>
                   </div>
-                  <button className="px-4 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-body)] rounded-lg text-sm font-medium hover:bg-[var(--bg-hover)] shadow-sm flex items-center gap-2 cursor-pointer">
+                  <button className="px-4 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-body)] rounded-lg text-sm font-medium hover:bg-[var(--bg-secondary)] shadow-sm flex items-center gap-2 cursor-pointer">
                     <RefreshCw size={16} /> {t('settings.face_settings.recalibrate')}
                   </button>
                 </div>
@@ -916,7 +917,7 @@ export default function Settings() {
 
                 {/* Footer Buttons */}
                 <div className="pt-6 flex justify-end gap-3 border-t border-[var(--border-color)]">
-                  <button className="px-6 py-2.5 rounded-xl text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-hover)] border border-[var(--border-color)] cursor-pointer">
+                  <button className="px-6 py-2.5 rounded-xl text-sm font-medium text-[var(--text-body)] hover:bg-[var(--bg-secondary)] border border-[var(--border-color)] cursor-pointer">
                     {t('settings.face_settings.discard')}
                   </button>
                   <button
