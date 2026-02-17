@@ -257,10 +257,6 @@ export default function Settings() {
             liveness,
             sensitivity,
           },
-          faceSettings: {
-            liveness,
-            sensitivity,
-          },
           emailPreferences: _emailPreferences,
           theme,
         },
